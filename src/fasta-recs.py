@@ -23,25 +23,30 @@ def main():
         if match is None:
             break
         index += match.end()
+
         beginName = index
 
         # Look for the end of the name
-        match = re.search("\s", content[index:])
+        match = re.search("\n", content[index:])
         if match is None:
-            print(content[beginName:len(content)])
+            chain = content[beginName:len(content)]
+            chain = re.sub('(\s)+',' ',chain).strip()
+            print(chain, end="\t")
             break
         index += match.start()
-        beginChain = index
 
-        name = content[beginName:index]
-        print(name, end="\t")
-        
+        chain = content[beginName:index]
+        chain = re.sub('(\s)+',' ',chain).strip()
+        print(chain, end="\t")
+
+        beginChain = index        
         # Look for the genome chain
         match = re.search(">", content[index:])
+        #print(beginChain)
         if match is None:
-            chain = content[index:len(content)]
+            chain = content[beginChain:len(content)]
             chain = re.sub('\n','', chain) # Delete intros
-            chain = re.sub('\s+',' ',chain).strip() # Replace spaces
+            chain = re.sub('(\s)+',' ',chain).strip() # Replace spaces
             print(chain)
             break
         index += match.start()
@@ -49,7 +54,7 @@ def main():
         # Delete spaces and intros
         chain = content[beginChain:index]
         chain = re.sub('\n','', chain) # Delete intros
-        chain = re.sub('\s+',' ',chain).strip() # Replace spaces
+        chain = re.sub('(\s)+',' ',chain).strip() # Replace spaces
         print(chain)
 
 
