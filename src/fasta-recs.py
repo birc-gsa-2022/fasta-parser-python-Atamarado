@@ -20,27 +20,32 @@ def main():
 
     while(index<len(content)):
         # Look for '> *'
-        res = re.search(">(\s)*", content[index:]).end()
-        if res<0:
+        match = re.search(">(\s)*", content[index:])
+        if match is None:
             break
-        index += res
+        index += match.end()
         beginName = index
 
         # Look for the end of the name
-        res = re.search("\s", content[index:]).start()
-        if res<0:
+        match = re.search("\s", content[index:])
+        if match is None:
+            print(content[beginName:len(content)])
             break
-        index += res
+        index += match.start()
         beginChain = index
 
         name = content[beginName:index]
         print(name, end=" ")
         
         # Look for the genome chain
-        res = re.search(">", content[index:]).start()
-        if res<0:
+        match = re.search(">", content[index:])
+        if match is None:
+            chain = content[index:len(content)]
+            chain = chain.replace("\s", "")
+            chain = chain.replace("\n", "")
+            print(chain)
             break
-        index += res
+        index += match.start()
         
         # Delete spaces and intros
         chain = content[beginChain:index]
