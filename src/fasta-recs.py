@@ -2,7 +2,6 @@ import argparse
 from email import contentmanager
 import re
 
-
 def main():
     argparser = argparse.ArgumentParser(
         description="Extract Simple-FASTA records"
@@ -35,22 +34,22 @@ def main():
         beginChain = index
 
         name = content[beginName:index]
-        print(name, end=" ")
+        print(name, end="\t")
         
         # Look for the genome chain
         match = re.search(">", content[index:])
         if match is None:
             chain = content[index:len(content)]
-            chain = chain.replace("\s", "")
-            chain = chain.replace("\n", "")
+            chain = re.sub('\n','', chain) # Delete intros
+            chain = re.sub('\s+',' ',chain).strip() # Replace spaces
             print(chain)
             break
         index += match.start()
         
         # Delete spaces and intros
         chain = content[beginChain:index]
-        chain = chain.replace("\s", "")
-        chain = chain.replace("\n", "")
+        chain = re.sub('\n','', chain) # Delete intros
+        chain = re.sub('\s+',' ',chain).strip() # Replace spaces
         print(chain)
 
 
