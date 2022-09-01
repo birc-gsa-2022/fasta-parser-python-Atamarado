@@ -1,12 +1,13 @@
 import argparse
+from Genome import Genome
 
 # Gets the name of the chromosome in the required format
 def stringN(string):
-    return string.strip()+'\t'
+    return string.strip()
 
 # Gets the chromosome in the required format
 def stringG(string):
-    return deleteSpacing(string)+'\n'
+    return deleteSpacing(string)
 
 # Deletes all space-like characters from a string
 def deleteSpacing(string):
@@ -17,8 +18,8 @@ def deleteSpacing(string):
     return output
 
 # This method provides a way to get the proccessed content of a genome
-def stringGenome(c):
-    output = ""
+def getGenomes(c):
+    genomes = []
 
     length = len(c)
     i = 0
@@ -29,6 +30,8 @@ def stringGenome(c):
         if i >= length:
             return
     
+    name = None
+    genomeChain = None
     chain = ""
 
     while(i<length):        
@@ -38,33 +41,34 @@ def stringGenome(c):
         while c[i] == ' ' or c[i] == '\t' or c[i] == '\n':
             i += 1
             if i >= length:
-                return output
+                return genomes
         
         # Store all the name
         while c[i] != '\n':
             chain += c[i]
             i += 1
             if i >= length:
-                return output+stringN(chain)
+                break
         
-        output += stringN(chain)
+        name = stringN(chain)
         chain = ""
 
         i += 1
-        if i>=length:
-            return
+        if i<length:
+            # Look for the genome
+            while c[i] != '>':
+                chain += c[i]
+                i += 1
+                if i >= length:
+                    break
 
-        # Look for the genome
-        while c[i] != '>':
-            chain += c[i]
-            i += 1
-            if i >= length:
-                return output+stringG(chain)
+        genomeChain = stringG(chain)
+        gen = Genome(name, genomeChain)
+        genomes.append(gen)
 
-        output += stringG(chain)
         chain = ""
     
-    return output
+    return genomes
 
 
 def main():
@@ -80,8 +84,9 @@ def main():
     # Read the content
     content = args.fasta.read()
 
-    output = stringGenome(content)
-    print(output, end='')
+    genomes = getGenomes(content)
+    for gen in genomes:
+        print(gen)
 
 if __name__ == '__main__':
     main()
