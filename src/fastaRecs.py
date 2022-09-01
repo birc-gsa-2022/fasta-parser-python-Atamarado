@@ -1,22 +1,6 @@
 import argparse
 from Genome import Genome
-from utils import isSpaceType
-
-# Gets the name of the chromosome in the required format
-def stringN(string):
-    return string.strip()
-
-# Gets the chromosome in the required format
-def stringG(string):
-    return deleteSpacing(string)
-
-# Deletes all space-like characters from a string
-def deleteSpacing(string):
-    output = ""
-    for c in string:
-        if not(isSpaceType(c)):
-            output += c
-    return output
+from utils import *
 
 # This method provides a way to get the proccessed content of a genome
 def getGenomes(c):
