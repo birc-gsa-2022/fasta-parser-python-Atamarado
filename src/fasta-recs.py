@@ -1,5 +1,4 @@
 import argparse
-from email import contentmanager
 import re
 
 def main():
@@ -51,9 +50,9 @@ def main():
             break
         index += match.start()
         
-        # Delete spaces and intros
+        # Delete spaces and newlines
         chain = content[beginChain:index]
-        chain = re.sub('\n','', chain) # Delete intros
+        chain = re.sub('\n','', chain) # Delete newlines
         chain = re.sub('(\s)+',' ',chain).strip() # Replace spaces
         print(chain)
 
