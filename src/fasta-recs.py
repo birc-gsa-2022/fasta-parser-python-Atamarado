@@ -39,9 +39,9 @@ def main():
         print(chain, end="\t")
 
         beginChain = index        
-        # Look for the genome chain
+        # Look for the chromosome chain
         match = re.search(">", content[index:])
-        #print(beginChain)
+        
         if match is None:
             chain = content[beginChain:len(content)]
             chain = re.sub('\n','', chain) # Delete intros
