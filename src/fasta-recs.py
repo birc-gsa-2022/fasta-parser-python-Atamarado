@@ -1,5 +1,69 @@
 import argparse
-import re
+
+# Prints the name of the chromosome in the required format
+def printN(string):
+    print(string.strip(), end='\t')
+
+# Prints the chromosome in the required format
+def printG(string):
+    print(deleteSpacing(string))
+
+# Deletes all space-like characters from a string
+def deleteSpacing(string):
+    output = ""
+    for c in string:
+        if c != " " and c != "\t" and c != "\n":
+            output += c
+    return output
+
+# This method provides a way to print the proccessed content of a genome
+def printGenome(c):
+    length = len(c)
+    i = 0
+
+    # Find the symbol that tells us the beginning of a chromosome
+    while  c[i] != '>':
+        i += 1
+        if i >= length:
+            return
+    
+    chain = ""
+
+    while(i<length):        
+        i += 1
+
+        # Find the beginning of the name
+        while c[i] == ' ' or c[i] == '\t' or c[i] == '\n':
+            i += 1
+            if i >= length:
+                return
+        
+        # Store all the name
+        while c[i] != '\n':
+            chain += c[i]
+            i += 1
+            if i >= length:
+                printN(chain)
+                return
+        
+        printN(chain)
+        chain = ""
+
+        i += 1
+        if i>=length:
+            return
+
+        # Look for the genome
+        while c[i] != '>':
+            chain += c[i]
+            i += 1
+            if i >= length:
+                printG(chain)
+                return
+
+        printG(chain)
+        chain = ""
+
 
 def main():
     argparser = argparse.ArgumentParser(
@@ -13,49 +77,8 @@ def main():
 
     # Read the content
     content = args.fasta.read()
-    
-    index = 0
 
-    while(index<len(content)):
-        # Look for '> *'
-        match = re.search(">(\s)*", content[index:])
-        if match is None:
-            break
-        index += match.end()
-
-        beginName = index
-
-        # Look for the end of the name
-        match = re.search("\n", content[index:])
-        if match is None:
-            chain = content[beginName:len(content)]
-            chain = re.sub('(\s)+',' ',chain).strip()
-            print(chain, end="\t")
-            break
-        index += match.start()
-
-        chain = content[beginName:index]
-        chain = re.sub('(\s)+',' ',chain).strip()
-        print(chain, end="\t")
-
-        beginChain = index        
-        # Look for the chromosome chain
-        match = re.search(">", content[index:])
-        
-        if match is None:
-            chain = content[beginChain:len(content)]
-            chain = re.sub('\n','', chain) # Delete intros
-            chain = re.sub('(\s)+',' ',chain).strip() # Replace spaces
-            print(chain)
-            break
-        index += match.start()
-        
-        # Delete spaces and newlines
-        chain = content[beginChain:index]
-        chain = re.sub('\n','', chain) # Delete newlines
-        chain = re.sub('(\s)+',' ',chain).strip() # Replace spaces
-        print(chain)
-
+    printGenome(content)
 
 if __name__ == '__main__':
     main()
