@@ -1,12 +1,12 @@
 import argparse
 
-# Prints the name of the chromosome in the required format
-def printN(string):
-    print(string.strip(), end='\t')
+# Gets the name of the chromosome in the required format
+def stringN(string):
+    return string.strip()+'\t'
 
-# Prints the chromosome in the required format
-def printG(string):
-    print(deleteSpacing(string))
+# Gets the chromosome in the required format
+def stringG(string):
+    return deleteSpacing(string)+'\n'
 
 # Deletes all space-like characters from a string
 def deleteSpacing(string):
@@ -16,8 +16,10 @@ def deleteSpacing(string):
             output += c
     return output
 
-# This method provides a way to print the proccessed content of a genome
-def printGenome(c):
+# This method provides a way to get the proccessed content of a genome
+def stringGenome(c):
+    output = ""
+
     length = len(c)
     i = 0
 
@@ -36,17 +38,16 @@ def printGenome(c):
         while c[i] == ' ' or c[i] == '\t' or c[i] == '\n':
             i += 1
             if i >= length:
-                return
+                return output
         
         # Store all the name
         while c[i] != '\n':
             chain += c[i]
             i += 1
             if i >= length:
-                printN(chain)
-                return
+                return output+stringN(chain)
         
-        printN(chain)
+        output += stringN(chain)
         chain = ""
 
         i += 1
@@ -58,11 +59,12 @@ def printGenome(c):
             chain += c[i]
             i += 1
             if i >= length:
-                printG(chain)
-                return
+                return output+stringG(chain)
 
-        printG(chain)
+        output += stringG(chain)
         chain = ""
+    
+    return output
 
 
 def main():
@@ -78,7 +80,8 @@ def main():
     # Read the content
     content = args.fasta.read()
 
-    printGenome(content)
+    output = stringGenome(content)
+    print(output, end='')
 
 if __name__ == '__main__':
     main()
