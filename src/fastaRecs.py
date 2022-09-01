@@ -1,5 +1,6 @@
 import argparse
 from Genome import Genome
+from utils import isSpaceType
 
 # Gets the name of the chromosome in the required format
 def stringN(string):
@@ -13,7 +14,7 @@ def stringG(string):
 def deleteSpacing(string):
     output = ""
     for c in string:
-        if c != " " and c != "\t" and c != "\n":
+        if not(isSpaceType(c)):
             output += c
     return output
 
@@ -38,7 +39,7 @@ def getGenomes(c):
         i += 1
 
         # Find the beginning of the name
-        while c[i] == ' ' or c[i] == '\t' or c[i] == '\n':
+        while isSpaceType(c[i]):
             i += 1
             if i >= length:
                 return genomes
