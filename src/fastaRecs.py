@@ -2,56 +2,40 @@ import argparse
 from Genome import Genome
 from utils import *
 
+# Returns the string and the index between the index pos until the character has been found
+def findingSequence(chain, c, index):
+    final = chain[index:].find(c)
+    if final<0:
+        return chain[index:], len(chain)
+    else:
+        return chain[index:index+final], index+final
+
 # This method provides a way to get the proccessed content of a genome
 def getGenomes(c):
     genomes = []
 
     length = len(c)
-    i = 0
 
     # Find the symbol that tells us the beginning of a chromosome
-    while  c[i] != '>':
-        i += 1
-        if i >= length:
-            return
-    
-    name = None
-    genomeChain = None
-    chain = ""
+    i = c.find(">")
+    if i<0:
+        return genomes
 
-    while(i<length):        
+    while(i<length):
+        i += 1
+        # This first line is the name, which we are going to process
+        name, i = findingSequence(c, "\n", i)
+        name = name.strip()
         i += 1
 
-        # Find the beginning of the name
-        while isSpaceType(c[i]):
-            i += 1
-            if i >= length:
-                return genomes
-        
-        # Store all the name
-        while c[i] != '\n':
-            chain += c[i]
-            i += 1
-            if i >= length:
-                break
-        
-        name = stringN(chain)
-        chain = ""
-
-        i += 1
+        # Look for the genome
+        genomeChain = ""
         if i<length:
-            # Look for the genome
-            while c[i] != '>':
-                chain += c[i]
-                i += 1
-                if i >= length:
-                    break
+            genomeChain, i = findingSequence(c, ">", i)
 
-        genomeChain = stringG(chain)
+        genomeChain = stringG(genomeChain)
         gen = Genome(name, genomeChain)
         genomes.append(gen)
-
-        chain = ""
     
     return genomes
 

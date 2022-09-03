@@ -1,7 +1,3 @@
-# Gets the name of the chromosome in the required format
-def stringN(string):
-    return string.strip()
-
 # Gets the chromosome in the required format
 def stringG(string):
     return deleteSpacing(string)

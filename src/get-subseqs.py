@@ -49,12 +49,10 @@ def processCords(c):
 # Returns a string containing the subsequence of a chromosome indicated by coord (both the name and positions)
 def getSubsequence(genomes, coord):
     # First of all, we have to find the genome to extract the subsequence
-    coordName = coord.getName()
-    begin = coord.getBegin()
-    end = coord.getEnd()
-    for gen in genomes:
-        if coordName == gen.getName():
-            return gen.getChain()[begin:end]
+    coordName = coord.name
+    begin = coord.begin
+    end = coord.end
+    return genomes[coordName][begin:end]
 
 def main():
     argparser = argparse.ArgumentParser(
@@ -75,7 +73,9 @@ def main():
     # print(f"Now I need to process the records in {args.fasta}")
     # Read the content
     content = args.fasta.read()
+
     genomes = getGenomes(content)
+    genomes = {x.name: x.chain for x in genomes}
 
     # print(f"and the coordinates in {args.coords}")
     content = args.coords.read()

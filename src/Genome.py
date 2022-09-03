@@ -5,9 +5,3 @@ class Genome:
     
     def __str__(self):
         return self.name+"\t"+self.chain
-    
-    def getName(self):
-        return self.name
-    
-    def getChain(self):
-        return self.chain
