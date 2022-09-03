@@ -36,7 +36,7 @@ def processCords(c):
                     name += line[j]
                     j+= 1
                 wordsProcessed += 1
-            name = stringN(name)
+            name = name.strip()
             # Get begin and end of the number. We substract one to start counting in 0
             begin = int(words[len(words)-2]) - 1
             end = int(words[len(words)-1]) - 1
